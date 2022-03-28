@@ -31,8 +31,7 @@ const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').inn
 
 const cartItemClickListener = (event) => {
   event.target.remove();
-  // saveCartItems(cartItems.innerHTML);
-  // getSkuFromProductItem(event.target);
+  saveCartItems(cartItems.innerHTML);
 };
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
@@ -43,10 +42,16 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
+const emptyCart = () => {
+  const btnEmptyCart = document.querySelector('.empty-cart');
+  btnEmptyCart.addEventListener('click', () => {
+    cartItems.innerHTML = '';
+  });
+};
+
 const getItem = async (itemId) => {
   const funcItem = await fetchItem(itemId);
   const { id, title, price } = funcItem;
-  console.log(funcItem);
   const result = createCartItemElement({ sku: id, name: title, salePrice: price });
   cartItems.appendChild(result);
 };
@@ -61,6 +66,34 @@ const getProduct = async () => {
   });
 };
 
+// const priceContainer = document.querySelector('.sum-values');
+
+// const sum = async (itemId) => {
+//   const funcItem = await fetchItem(itemId);
+//   if (priceContainer.innerText) {
+//     const result = parseFloat(priceContainer.innerText, 10) - parseFloat(funcItem.price, 10);
+//     priceContainer.innerText = result % 1 === 0 ? result : result.toFixed(2);
+//   }
+//   priceContainer.innerText = funcItem.price;
+// };
+
+// const sumOfValues = async () => {
+//   const a = await createCustomElement('p', 'sum-values', 'Total:');
+//   cartItems.appendChild(a);
+// };
+
+// sumOfValues();
+
+// const saveCartLC = () => {
+//   cartItems.innerHTML = getSavedCartItems();
+//   Object.keys(cartItems.children)
+//     .forEach((element) => {
+//       cartItems.children[element].addEventListener('click', cartItemClickListener);
+//       const sku = 
+//     })
+// };
+
 window.onload = async () => { 
   await getProduct();
+  emptyCart();
 };
