@@ -36,14 +36,18 @@ const sumOfValues = () => {
     sum += parseFloat(price);
   });
   totalPrice.innerText = sum;
+  getSavedCartItems();
 };
 
 const getSkuFromProductItem = (item) => {
+  const splitSku = item.innerText.split(' ');
+  return splitSku[1];
 };
 
 const cartItemClickListener = (event) => {
   event.target.remove();
   saveCartItems(cartItems.innerHTML);
+  getSkuFromProductItem(event.target);
   sumOfValues();
 };
 
@@ -85,7 +89,19 @@ const getProduct = async () => {
   });
 };
 
+const loadSaveCart = () => {
+  const funcSaveCart = getSavedCartItems();
+  cartItems.innerHTML = funcSaveCart;
+  const objctKeys = Object.keys(cartItems.innerHTML);
+  objctKeys.forEach((element) => {
+    const cartElement = cartItems.children[element];
+    cartElement.addEventListener('click', cartItemClickListener);
+    getSkuFromProductItem(cartElement);
+  });
+};
+
 window.onload = async () => { 
   await getProduct();
   emptyCart();
+  loadSaveCart();
 };
